@@ -233,7 +233,10 @@ classdef (Sealed) CameraPipelineAPI < handle
         function RunDngOneExeSDK(obj, flags, stage_output_filename, readImage)
             if isnumeric(flags), flags = num2str(flags); end;    
             system_command = [fullfile(obj.cam_pipeline_path, obj.dng_exe),' -16 -',flags,' ', stage_output_filename, ' ', obj.input_filename];
+            dir_to_return = pwd;
+            cd(obj.cam_pipeline_path);
             system(system_command);
+            cd(dir_to_return);
             if ~exist('readImage','var') || ( exist('readImage','var') && readImage)
                 obj.image = imread(stage_output_filename);
                 delete(stage_output_filename);
